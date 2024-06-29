@@ -32,7 +32,7 @@ export default class Labeler {
     log('Waiting for the pipeline to be ready')
     await DetectFood.getInstance()
     log('Pipeline is ready')
-    this.queue.process(1, this.processJob)
+    this.queue.process(this.params.maxPerBatch, this.processJob)
     this.firehose.on('message', this.handleMessage)
   }
 

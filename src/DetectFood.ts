@@ -3,6 +3,7 @@ import {DetectJob, DetectJobParams} from './types'
 
 // Labels that are extremely inaccurate
 const IGNORED_LABELS = ['macarons', 'ice_cream']
+const REQUIRES_HIGHER_CONFIDENCE = ['cup_cakes']
 
 export default class DetectFood {
   static instance: Promise<any>
@@ -37,7 +38,22 @@ export default class DetectFood {
         continue
       }
 
-      if (topLabel.score < 0.2) continue
+      if (
+        REQUIRES_HIGHER_CONFIDENCE.includes(topLabel.label) &&
+        topLabel.score < 0.35
+      ) {
+        log(
+          'Label requires higher confidence:',
+          JSON.stringify(
+            {label: topLabel.label, score: topLabel.score, image},
+            null,
+            2,
+          ),
+        )
+        continue
+      }
+
+      if (topLabel.score < 0.175) continue
 
       log(
         'Detected food:',
