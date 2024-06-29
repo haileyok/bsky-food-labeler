@@ -14,7 +14,7 @@ export default class DetectFood {
     if (this.instance == null) {
       let {pipeline} = await import('@xenova/transformers')
       this.instance = pipeline(
-        'object-detection',
+        'image-classification',
         'william7642/my_awesome_food_model',
       )
     }
