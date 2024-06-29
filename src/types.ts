@@ -1,7 +1,7 @@
-import BeeQueue from 'bee-queue'
+import {BskyAgent} from '@atproto/api'
 
 export interface Params {
-  bskyUsername: string
+  bskyIdentifier: string
   bskyPassword: string
   redisHost: string
   redisPort: number
@@ -9,13 +9,22 @@ export interface Params {
   maxPerBatch: number
 }
 
-export interface DetectJob {
+export interface JobData {
+  did: string
   rkey: string
   cid: string
   images: string[]
 }
+export type LabelJobData = JobData & {label: FoodLabel}
 
 export interface DetectJobParams {
-  job: DetectJob
-  done: BeeQueue.DoneCallback<any>
+  data: JobData
+  addLabelJob: (label: FoodLabel) => void
 }
+
+export interface LabelJobParams {
+  data: LabelJobData
+  agent: BskyAgent
+}
+
+export type FoodLabel = 'food' | 'food-low-conf'

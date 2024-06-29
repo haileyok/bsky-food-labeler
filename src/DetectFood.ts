@@ -1,5 +1,5 @@
 import {log} from './util'
-import {DetectJob, DetectJobParams} from './types'
+import {JobData, DetectJobParams} from './types'
 
 // Labels that are extremely inaccurate
 const IGNORED_LABELS = ['macarons', 'ice_cream']
@@ -7,11 +7,8 @@ const REQUIRES_HIGHER_CONFIDENCE = ['cup_cakes']
 
 export default class DetectFood {
   static instance: Promise<any>
-  job: DetectJob
 
-  constructor(private params: DetectJobParams) {
-    this.job = params.job
-  }
+  constructor(private params: DetectJobParams) {}
 
   static getInstance = async () => {
     if (this.instance == null) {
@@ -25,7 +22,7 @@ export default class DetectFood {
   }
 
   detect = async () => {
-    for (const image of this.job.images) {
+    for (const image of this.params.data.images) {
       const pipeline = await DetectFood.getInstance()
       const res = (await pipeline(image, {
         topk: 4,
@@ -64,6 +61,5 @@ export default class DetectFood {
         ),
       )
     }
-    this.params.done(null, 'done')
   }
 }
