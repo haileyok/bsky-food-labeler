@@ -19,11 +19,11 @@ export interface JobData {
   cid: string
   images: string[]
 }
-export type LabelJobData = JobData & {label: FoodLabel}
+export type LabelJobData = JobData & {label: FoodLabel; context: string}
 
 export interface DetectJobParams {
   data: JobData
-  addLabelJob: (label: FoodLabel) => void
+  addLabelJob: (label: FoodLabel, context: string) => void
 }
 
 export interface LabelJobParams {

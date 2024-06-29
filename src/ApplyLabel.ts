@@ -6,7 +6,7 @@ export default class ApplyLabel {
 
   apply = async () => {
     const {data, agent} = this.params
-    const {did, rkey, label, cid} = data
+    const {did, rkey, label, cid, context} = data
 
     const uri = `at://${did}/app.bsky.feed.post/${rkey}`
     log(`Applying label to ${uri} with label ${label}`)
@@ -19,6 +19,7 @@ export default class ApplyLabel {
             $type: 'tools.ozone.moderation.defs#modEventLabel',
             createLabelVals: [label],
             negateLabelVals: [],
+            comment: context,
           },
           subject: {
             $type: 'com.atproto.repo.strongRef',

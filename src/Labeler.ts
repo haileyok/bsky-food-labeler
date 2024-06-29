@@ -149,11 +149,12 @@ export default class Labeler {
     job: BeeQueue.Job<JobData>,
     done: BeeQueue.DoneCallback<any>,
   ) => {
-    const addLabelJob = (label: FoodLabel) => {
+    const addLabelJob = (label: FoodLabel, context: string) => {
       this.labelJobQueue
         .createJob({
           ...job.data,
           label,
+          context,
         })
         .save()
     }

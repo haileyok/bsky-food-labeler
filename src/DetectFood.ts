@@ -1,5 +1,5 @@
 import {log} from './util'
-import {JobData, DetectJobParams} from './types'
+import {DetectJobParams} from './types'
 
 // Labels that are extremely inaccurate
 const IGNORED_LABELS = ['macarons', 'ice_cream']
@@ -14,7 +14,7 @@ export default class DetectFood {
     if (this.instance == null) {
       let {pipeline} = await import('@xenova/transformers')
       this.instance = pipeline(
-        'image-classification',
+        'object-detection',
         'william7642/my_awesome_food_model',
       )
     }
@@ -52,21 +52,19 @@ export default class DetectFood {
 
       if (topLabel.score < 0.175) continue
 
-      log(
-        'Detected food:',
-        JSON.stringify(
-          {label: topLabel.label, score: topLabel.score, image},
-          null,
-          2,
-        ),
+      const context = JSON.stringify(
+        {label: topLabel.label, score: topLabel.score, image},
+        null,
+        2,
       )
+      log('Detected food:', context)
 
       const label =
         REQUIRES_HIGHER_CONFIDENCE.includes(topLabel.label) ||
         topLabel.score < 0.25
           ? 'food-low-conf'
           : 'food'
-      this.params.addLabelJob(label)
+      this.params.addLabelJob(label, context)
     }
   }
 }
