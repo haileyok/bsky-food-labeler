@@ -2,12 +2,13 @@ import {log} from './util'
 import {DetectJobParams} from './types'
 
 // Labels that are extremely inaccurate
-const IGNORED_LABELS = ['macarons', 'ice_cream']
+const IGNORED_LABELS = ['macarons']
 const REQUIRES_HIGHER_CONFIDENCE = [
   {label: 'cup_cakes', score: 0.35},
   {label: 'chocolate_cake', score: 0.4},
   {label: 'chocolate_mousse', score: 0.3},
   {label: 'donuts', score: 0.3},
+  {label: 'ice_cream', score: 0.35},
 ]
 
 export default class DetectFood {
