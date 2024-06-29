@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "type": "commonjs",
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc -w",
@@ -10,8 +11,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.28",
-    "@typescript-eslint/parser": "^7.14.1",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -24,8 +25,10 @@
   "dependencies": {
     "@atproto/api": "^0.11.1",
     "@atproto/ozone": "^0.1.1",
+    "@xenova/transformers": "latest",
     "atproto-firehose": "^0.2.2",
     "axios": "^1.6.8",
+    "bee-queue": "^1.7.1",
     "dotenv": "^16.4.5"
   }
 }
