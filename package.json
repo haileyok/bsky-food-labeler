@@ -3,22 +3,29 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "build": "npx tsc",
+    "watch": "npx tsc -w",
+    "start": "node build/index.js"
+  },
   "devDependencies": {
     "@types/node": "^20.11.28",
+    "@typescript-eslint/parser": "^7.14.1",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-prettier": "^0.0.0-empty",
+    "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.18.0",
     "@atproto/api": "^0.11.1",
     "@atproto/ozone": "^0.1.1",
     "atproto-firehose": "^0.2.2",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5"
-  },
-  "scripts": {
-    "build": "npx tsc",
-    "watch": "npx tsc -w",
-    "start": "node build/index.js"
   }
 }
