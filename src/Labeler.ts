@@ -103,17 +103,28 @@ export default class Labeler {
         AppBskyEmbedExternal.isMain(payload.embed) &&
         payload.embed.external.thumb
       ) {
-        const cdnUri = createCdnUri(
-          message.repo,
-          payload.embed.external.thumb.ref,
+        imageUris.push(
+          createCdnUri(message.repo, payload.embed.external.thumb.ref),
         )
-        imageUris.push(cdnUri)
       } else {
         if (AppBskyEmbedImages.isMain(payload.embed)) {
           images = payload.embed.images
         } else if (AppBskyEmbedRecordWithMedia.isMain(payload.embed)) {
-          // @ts-ignore
-          images = payload.embed.media.images
+          if (Array.isArray(payload.embed.media.images)) {
+            images = payload.embed.media.images
+          }
+
+          if (
+            AppBskyEmbedExternal.isExternal(payload.embed.media.external) &&
+            payload.embed.media.external.thumb
+          ) {
+            imageUris.push(
+              createCdnUri(
+                message.repo,
+                payload.embed.media.external.thumb.ref,
+              ),
+            )
+          }
         }
 
         for (const image of images) {
