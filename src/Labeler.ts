@@ -8,7 +8,13 @@ import {
 import BeeQueue from 'bee-queue'
 import DetectFood from './DetectFood'
 import {JobData, FoodLabel, Params, LabelJobData} from './types'
-import {AppBskyEmbedImages, AppBskyFeedPost, BskyAgent} from '@atproto/api'
+import {
+  AppBskyEmbedExternal,
+  AppBskyEmbedImages,
+  AppBskyEmbedRecordWithMedia,
+  AppBskyFeedPost,
+  BskyAgent,
+} from '@atproto/api'
 import ApplyLabel from './ApplyLabel'
 
 const QUEUE_SETTINGS = (redisSettings: {host: string; port: number}) => ({
@@ -75,19 +81,44 @@ export default class Labeler {
       if (!op.cid) continue
 
       const payload = op.payload
+
       if (!AppBskyFeedPost.isRecord(payload)) continue
 
       if (!payload.embed) continue
-      if (!AppBskyEmbedImages.isMain(payload.embed)) continue
+
+      const shouldCheck =
+        AppBskyEmbedImages.isMain(payload.embed) ||
+        AppBskyEmbedRecordWithMedia.isMain(payload.embed) ||
+        (this.params.includeExternalEmbeds &&
+          AppBskyEmbedExternal.isMain(payload.embed))
+      if (!shouldCheck) continue
 
       const rkey = parsePath(op.path)?.rkey
       if (!rkey) continue
 
-      const images: string[] = []
+      let images: AppBskyEmbedImages.Image[] = []
+      const imageUris: string[] = []
 
-      for (const image of payload.embed.images) {
-        const cdnUri = createCdnUri(message.repo, image.image.ref.toString())
-        images.push(cdnUri)
+      if (
+        AppBskyEmbedExternal.isMain(payload.embed) &&
+        payload.embed.external.thumb
+      ) {
+        const cdnUri = createCdnUri(
+          message.repo,
+          payload.embed.external.thumb.ref,
+        )
+        imageUris.push(cdnUri)
+      } else {
+        if (AppBskyEmbedImages.isMain(payload.embed)) {
+          images = payload.embed.images
+        } else if (AppBskyEmbedRecordWithMedia.isMain(payload.embed)) {
+          // @ts-ignore
+          images = payload.embed.media.images
+        }
+
+        for (const image of images) {
+          imageUris.push(createCdnUri(message.repo, image.image.ref))
+        }
       }
 
       if (images.length === 0) continue
@@ -97,7 +128,7 @@ export default class Labeler {
           did: message.repo,
           rkey,
           cid: op.cid.toString(),
-          images,
+          imageUris,
         })
         .save()
     }

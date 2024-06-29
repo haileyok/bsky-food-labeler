@@ -1,8 +1,12 @@
 import {BskyAgent} from '@atproto/api'
 
+// Whatever labels you set in Ozone
+export type FoodLabel = 'food' | 'food-low-conf'
+
 export interface Params {
   bskyIdentifier: string
   bskyPassword: string
+  includeExternalEmbeds: boolean
   redisHost: string
   redisPort: number
   interval: number
@@ -26,5 +30,3 @@ export interface LabelJobParams {
   data: LabelJobData
   agent: BskyAgent
 }
-
-export type FoodLabel = 'food' | 'food-low-conf'
