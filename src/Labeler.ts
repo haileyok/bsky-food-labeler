@@ -126,20 +126,20 @@ export default class Labeler {
             )
           }
         }
-
-        for (const image of images) {
-          imageUris.push(createCdnUri(message.repo, image.image.ref))
-        }
       }
 
-      if (images.length === 0) continue
+      for (const image of images) {
+        imageUris.push(createCdnUri(message.repo, image.image.ref.toString()))
+      }
+
+      if (imageUris.length === 0) continue
 
       this.detectJobQueue
         .createJob({
           did: message.repo,
           rkey,
           cid: op.cid.toString(),
-          imageUris,
+          images: imageUris,
         })
         .save()
     }
