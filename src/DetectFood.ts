@@ -60,6 +60,13 @@ export default class DetectFood {
           2,
         ),
       )
+
+      const label =
+        REQUIRES_HIGHER_CONFIDENCE.includes(topLabel.label) ||
+        topLabel.score < 0.25
+          ? 'food-low-conf'
+          : 'food'
+      this.params.addLabelJob(label)
     }
   }
 }
