@@ -8,7 +8,7 @@ const REQUIRES_HIGHER_CONFIDENCE = [
   {label: 'chocolate_cake', score: 0.4},
   {label: 'chocolate_mousse', score: 0.3},
   {label: 'donuts', score: 0.3},
-  {label: 'ice_cream', score: 0.35},
+  {label: 'ice_cream', score: 0.7},
 ]
 
 export default class DetectFood {
